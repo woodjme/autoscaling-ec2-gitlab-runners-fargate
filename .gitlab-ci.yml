@@ -1,4 +1,4 @@
-image: python3
+image: python:3-slim
 
 stages:
   - deploy
