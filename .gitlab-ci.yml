@@ -12,9 +12,9 @@ deploys3:
   before_script:
     - pip install awscli
   script:
-    - aws s3 cp gitlab-runner-template.yml s3://${BUCKET_NAME}/${CI_COMMIT_REF_NAME}
+    - aws s3 cp gitlab-runner-template.yml s3://${BUCKET_NAME}/${CI_COMMIT_REF_NAME}/gitlab-runner-template.yml
   environment:
     name: ${CI_COMMIT_REF_NAME}
-    url: http://${BUCKET_NAME}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/${CI_COMMIT_REF_NAME}
+    url: http://${BUCKET_NAME}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/${CI_COMMIT_REF_NAME}/gitlab-runner-template.yml
   only: 
    - master
