@@ -1,1 +1,20 @@
----
+image: python3
+
+stages:
+  - deploy
+
+variables:
+  AWS_DEFAULT_REGION: eu-west-1
+  BUCKET_NAME: autoscaling-ec2-gitlab-runners-fargate
+
+deploys3:
+  stage: deploy
+  before_script:
+    - pip install awscli
+  script:
+    - aws s3 cp gitlab-runner-template.yml s3://${BUCKET_NAME}/${CI_COMMIT_REF_NAME}
+  environment:
+    name: ${CI_COMMIT_REF_NAME}
+    url: http://${BUCKET_NAME}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/${CI_COMMIT_REF_NAME}
+  only: 
+   - master
