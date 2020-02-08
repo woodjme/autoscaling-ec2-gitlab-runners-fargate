@@ -15,6 +15,6 @@ deploys3:
     - aws s3 cp --acl public-read gitlab-runner-template.yml s3://${BUCKET_NAME}/${CI_COMMIT_REF_NAME}/gitlab-runner-template.yml
   environment:
     name: ${CI_COMMIT_REF_NAME}
-    url: https://${BUCKET_NAME}.s3-.${AWS_DEFAULT_REGION}.amazonaws.com/${CI_COMMIT_REF_NAME}/gitlab-runner-template.yml
+    url: https://${BUCKET_NAME}.s3-${AWS_DEFAULT_REGION}.amazonaws.com/${CI_COMMIT_REF_NAME}/gitlab-runner-template.yml
   only: 
    - master
