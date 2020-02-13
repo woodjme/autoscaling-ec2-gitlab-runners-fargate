@@ -4,6 +4,8 @@ The purpose of the CloudFormation template is to create a Fargate Service that m
 
 [![Launch CloudFormation](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?stackName=stack_name&templateURL=template_locationhttps://console.aws.amazon.com/cloudformation/home?region=region#/stacks/new?stackName=stack_name&templateURL=https://autoscaling-ec2-gitlab-runners-fargate.s3-eu-west-1.amazonaws.com/master/gitlab-runner-template.yml)
 
+![Diagram](https://github.com/woodjme/autoscaling-ec2-gitlab-runners-fargate/blob/master/diagram.png?raw=true)
+
 ## Parameters
 
 * VpcId - Select a VPC that allows instances access to the Internet
