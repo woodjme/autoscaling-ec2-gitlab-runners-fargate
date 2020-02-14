@@ -8,16 +8,16 @@ The purpose of the CloudFormation template is to create a Fargate Service that m
 
 ## Parameters
 
-* VpcId - Select a VPC that allows instances access to the Internet
-* SubnetID - Select subnets - Must be in the selected VPC!
-* CacheExpirationInDays - Select how long to store a jobs cache output in S3
-* RootVolumeSize -The size of the root volume on the runners
-* GitLabURL - The Gitlab URL, change if self-hosted
-* GitLabRegistrationToken - The Gitlab runer registration token
-* DockerImage - The default docker image if not provided in a gitlab-ci.yml file
-* CPU - Set the number of CPUs for the spawner (1 CPU = 1024)
-* Memory - Set the amount of RAM in KB for the spawner
-* InstanceType - The instance type of the runners
+* `VpcId` - Select a VPC that allows instances access to the Internet
+* `SubnetID` - Select subnets - Must be in the selected VPC!
+* `GitLabURL` - The Gitlab URL, change if self-hosted
+* `GitLabRegistrationToken` - The Gitlab runer registration token
+* `InstanceType` - The instance type of the runners
+* `RootVolumeSize` -The size of the root volume on the runners
+* `CacheExpirationInDays` - Select how long to store a jobs cache output in S3
+* `CPU` - Set the number of CPUs for the spawner (1 CPU = 1024)
+* `Memory` - Set the amount of RAM in KB for the spawner
+* `DockerImage` - The default docker image if not provided in a gitlab-ci.yml file
 
 ## Resource Created
 
