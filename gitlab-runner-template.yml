@@ -1,14 +1,44 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Autoscaling Gitlab Runners Spawned by Fargate
-# Metadata:
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "Network Configuration"
+        Parameters: 
+          - VpcId
+          - SubnetId
+      - 
+        Label: 
+          default: "GitLab Configuration"
+        Parameters: 
+          - GitLabURL
+          - GitLabRegistrationToken
+      - 
+        Label: 
+          default: "GitLab Runner Configuration"
+        Parameters: 
+          - InstanceType
+          - RootVolumeSize
+          - CacheExpirationInDays
+      - 
+        Label: 
+          default: "Fargate Spawner Configuration"
+        Parameters: 
+          - CPU
+          - Memory
+          - DockerImage
+
+
 
 Parameters:
   VpcId:
     Type: AWS::EC2::VPC::Id
     Description: Select a VPC that allows instances access to the Internet
   SubnetId:
-    Type: String
-    Description: Select a subnet in the selected VPC - subnet-xyz123
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Select a subnet - Must be in the selected VPC!
   CacheExpirationInDays:
     Type: Number
     Default: 1
@@ -191,7 +221,7 @@ Resources:
       NetworkConfiguration: {
         "AwsvpcConfiguration": {
           "AssignPublicIp" : ENABLED,
-          "Subnets" : [ !Ref SubnetId ]
+          "Subnets" : !Ref SubnetId 
         }
       }
   CloudwatchLogsGroup:
