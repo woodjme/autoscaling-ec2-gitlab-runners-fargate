@@ -38,7 +38,7 @@ Parameters:
     Description: Select a VPC that allows instances access to the Internet
   SubnetId:
     Type: List<AWS::EC2::Subnet::Id>
-    Description: Select a subnet - Must be in the selected VPC!
+    Description: Select subnets - Must be in the selected VPC!
   CacheExpirationInDays:
     Type: Number
     Default: 1
