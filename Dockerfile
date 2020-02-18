@@ -13,7 +13,7 @@ RUN curl -LJO https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/deb/g
 RUN dpkg -i gitlab-runner_amd64.deb
 
 # Install Docker Machine
-RUN curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine && \
+RUN curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine && \
 chmod +x /tmp/docker-machine && \
 cp /tmp/docker-machine /usr/local/bin/docker-machine
 
