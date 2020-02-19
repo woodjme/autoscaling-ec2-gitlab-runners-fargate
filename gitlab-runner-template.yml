@@ -54,6 +54,10 @@ Parameters:
   GitLabRegistrationToken:
     Type: String
     Description: The Gitlab runer registration token
+  AdditionalRegisterParams:
+    Type: String
+    Description: Optional parameters to be passed to gitlab-runner register
+    Default: ""
   DockerImage:
     Type: String
     Default: "docker:latest"
@@ -253,6 +257,7 @@ Resources:
           {"Name":"AWS_SSH_USER", "Value": 'ubuntu'},
           {"Name":"AWS_AMI", "Value": { "Fn::FindInMap" : [ "AWSAMIRegionMap", { "Ref" : "AWS::Region" }, "UBUNTU1804"]}},
           {"Name":"DOCKER_IMAGE", "Value": !Ref DockerImage},
+          {"Name":"ADDITIONAL_REGISTER_PARAMS", "Value": !Ref AdditionalRegisterParams},
           {"Name":"AWS_INSTANCE_TYPE", "Value": !Ref InstanceType},
           {"Name":"CACHE_TYPE", "Value": 's3'},
           {"Name":"CACHE_S3_ACCESS_KEY", "Value": !Ref iamAccessKey},
