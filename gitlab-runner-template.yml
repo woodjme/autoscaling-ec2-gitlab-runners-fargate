@@ -199,6 +199,33 @@ Resources:
               - ecs-tasks.amazonaws.com
             Action:
               - 'sts:AssumeRole'
+  SpawnerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: GitlabSpawnerSecurityRules
+      GroupName: !Join ['-', [ !Ref 'AWS::StackName', GitlabSpawnerSecurityRules]]
+      SecurityGroupEgress: 
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VpcId
+  RunnerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: GitlabRunnerSecurityRules
+      GroupName: !Join ['-', [ !Ref 'AWS::StackName', GitlabRunnerSecurityRules]]
+      SecurityGroupIngress: 
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          SourceSecurityGroupId: !GetAtt SpawnerSecurityGroup.GroupId
+        - IpProtocol: tcp
+          FromPort: 2376
+          ToPort: 2376
+          SourceSecurityGroupId: !GetAtt SpawnerSecurityGroup.GroupId
+      SecurityGroupEgress: 
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VpcId
   GitLabRunnerCacheBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -225,7 +252,8 @@ Resources:
       NetworkConfiguration: {
         "AwsvpcConfiguration": {
           "AssignPublicIp" : ENABLED,
-          "Subnets" : !Ref SubnetId 
+          "Subnets" : !Ref SubnetId,
+          "SecurityGroups" : [ !GetAtt SpawnerSecurityGroup.GroupId ]
         }
       }
   CloudwatchLogsGroup:
@@ -255,6 +283,7 @@ Resources:
           {"Name":"AWS_DEFAULT_REGION", "Value": !Ref "AWS::Region"},
           {"Name":"AWS_VPC_ID", "Value": !Ref VpcId},
           {"Name":"AWS_SSH_USER", "Value": 'ubuntu'},
+          {"Name":"AWS_SECURITY_GROUP", "Value": !Join ['-', [ !Ref 'AWS::StackName', GitlabRunnerSecurityRules]]},
           {"Name":"AWS_AMI", "Value": { "Fn::FindInMap" : [ "AWSAMIRegionMap", { "Ref" : "AWS::Region" }, "UBUNTU1804"]}},
           {"Name":"DOCKER_IMAGE", "Value": !Ref DockerImage},
           {"Name":"ADDITIONAL_REGISTER_PARAMS", "Value": !Ref AdditionalRegisterParams},

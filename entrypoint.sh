@@ -8,7 +8,11 @@ gitlab-runner register --executor docker+machine \
 --machine-machine-driver "amazonec2" \
 --machine-machine-name "gitlab-%s" \
 --request-concurrency 12 \
-$ADDITIONAL_REGISTER_PARAMS
+--machine-machine-options amazonec2-use-private-address \
+--machine-machine-options amazonec2-security-group=$AWS_SECURITY_GROUP \
+$ADDITIONAL_REGISTER_PARAM
+
+# Native env var seems to be broken for security group
 
 # Start Runner
 gitlab-runner run

@@ -2,11 +2,12 @@ FROM ubuntu:bionic
 LABEL maintainer="me@jamiewood.io"
 
 ARG version="12.7.1"
-# Update
-RUN apt-get update -y && apt-get upgrade -y
 
 # Install deps
-RUN apt-get install -y curl git
+RUN apt-get update && apt-get install -y \
+	curl \
+	git \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Install Gitlab Runner
 RUN curl -LJO https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/deb/gitlab-runner_amd64.deb
