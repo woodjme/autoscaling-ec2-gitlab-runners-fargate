@@ -12,6 +12,7 @@ The purpose of the CloudFormation template is to create a Fargate Service that m
 * `SubnetID` - Select subnets - Must be in the selected VPC!
 * `GitLabURL` - The Gitlab URL, change if self-hosted
 * `GitLabRegistrationToken` - The Gitlab runer registration token
+* `AdditionalRegisterParams` - Any additional parameters you want to pass to `gitlab-runner register`
 * `InstanceType` - The instance type of the runners
 * `RootVolumeSize` -The size of the root volume on the runners
 * `CacheExpirationInDays` - Select how long to store a jobs cache output in S3
@@ -21,7 +22,8 @@ The purpose of the CloudFormation template is to create a Fargate Service that m
 
 ## Resource Created
 
-* IAM User - Needed as Fargate doesn't support Instance Profiles
+* IAM User - Used to connect to S3
+* IAM Roles for ECS
 * S3 Bucket for runner cache
 * ECS Cluster, Service & Task Definition
 * CloudWatch Logs Groups that streams to logs for the spawner
