@@ -1,4 +1,4 @@
-image: cd
+image: python:3-slim
 
 stages:
   - test
