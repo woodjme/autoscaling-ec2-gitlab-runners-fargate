@@ -1,11 +1,19 @@
-image: python:3-slim
+image: cd
 
 stages:
+  - test
   - deploy
 
 variables:
   AWS_DEFAULT_REGION: eu-west-1
   BUCKET_NAME: autoscaling-ec2-gitlab-runners-fargate
+
+test:
+  stage: test
+  before_script:
+    - pip install cfn-lint
+  script:
+    - cfn-lint -t gitlab-runner-template.yml
 
 deploys3:
   stage: deploy

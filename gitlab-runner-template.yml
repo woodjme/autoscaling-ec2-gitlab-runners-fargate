@@ -303,7 +303,7 @@ Resources:
           {"Name":"CACHE_TYPE", "Value": 's3'},
           {"Name":"CACHE_S3_ACCESS_KEY", "Value": !Ref iamAccessKey},
           {"Name":"CACHE_S3_SECRET_KEY", "Value": !GetAtt iamAccessKey.SecretAccessKey},
-          {"Name":"CACHE_SHARED", "Value": true},
+          {"Name":"CACHE_SHARED", "Value": "true"},
           {"Name":"CACHE_S3_BUCKET_NAME", "Value": !Ref GitLabRunnerCacheBucket},
           {"Name":"CACHE_S3_BUCKET_LOCATION", "Value": !Ref "AWS::Region"},
           {"Name":"CACHE_S3_SERVER_ADDRESS", "Value": !Join ['', [s3., !Ref 'AWS::URLSuffix']]}
