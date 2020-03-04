@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 LABEL maintainer="me@jamiewood.io"
 
-ARG version="12.7.1"
+ARG version="12.8.0"
 
 # Install deps
 RUN apt-get update && apt-get install -y \
