@@ -54,7 +54,7 @@ Parameters:
     Default: https://gitlab.com
   GitLabRegistrationToken:
     Type: String
-    Description: The Gitlab runer registration token
+    Description: The Gitlab runner registration token
   AdditionalRegisterParams:
     Type: String
     Description: Optional parameters to be passed to gitlab-runner register
@@ -156,33 +156,6 @@ Mappings:
 # Conditions:
 
 Resources:
-  iamUser:
-    Type: AWS::IAM::User
-    Properties: 
-      UserName: !Join ['-', [ !Ref 'AWS::StackName', s3user]]
-      Policies:
-        - PolicyName: GitLabCacheBucket
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: 'Allow'
-                Action:
-                  - 's3:ListObjects*'
-                  - 's3:GetObject*'
-                  - 's3:DeleteObject*'
-                  - 's3:PutObject*'
-                Resource:
-                  - !Sub '${GitLabRunnerCacheBucket.Arn}/*'
-              - Effect: 'Allow'
-                Action:
-                  - 's3:ListBucket'
-                Resource:
-                  - !GetAtt GitLabRunnerCacheBucket.Arn
-  iamAccessKey:
-    Type: AWS::IAM::AccessKey
-    Properties:
-      Status: Active
-      UserName: !Ref iamUser
   iamRoleForEcsExecution:
     Type: AWS::IAM::Role
     Properties:
@@ -204,6 +177,22 @@ Resources:
       RoleName: !Join ['-', [ !Ref 'AWS::StackName', GitlabECSTaskRole]]
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+      Policies:
+        - PolicyName: AccessS3Cache
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: AccessS3Cache
+                Effect: Allow
+                Action:
+                  - 's3:ListObjects*'
+                  - 's3:GetObject*'
+                  - 's3:DeleteObject*'
+                  - 's3:PutObject*'
+                  - 's3:ListBucket'
+                Resource:
+                  - !Sub '${GitLabRunnerCacheBucket.Arn}/*'
+                  - !Sub '${GitLabRunnerCacheBucket.Arn}'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -301,8 +290,6 @@ Resources:
           {"Name":"ADDITIONAL_REGISTER_PARAMS", "Value": !Ref AdditionalRegisterParams},
           {"Name":"AWS_INSTANCE_TYPE", "Value": !Ref InstanceType},
           {"Name":"CACHE_TYPE", "Value": 's3'},
-          {"Name":"CACHE_S3_ACCESS_KEY", "Value": !Ref iamAccessKey},
-          {"Name":"CACHE_S3_SECRET_KEY", "Value": !GetAtt iamAccessKey.SecretAccessKey},
           {"Name":"CACHE_SHARED", "Value": "true"},
           {"Name":"CACHE_S3_BUCKET_NAME", "Value": !Ref GitLabRunnerCacheBucket},
           {"Name":"CACHE_S3_BUCKET_LOCATION", "Value": !Ref "AWS::Region"},
