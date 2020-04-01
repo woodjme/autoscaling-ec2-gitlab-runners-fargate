@@ -16,6 +16,7 @@ Metadata:
           - GitLabURL
           - GitLabRegistrationToken
           - RunnerTagList
+          - RunnerRequestConcurrency
           - AdditionalRegisterParams
       -
         Label:
@@ -57,6 +58,10 @@ Parameters:
     Type: String
     Description: The Gitlab runer registration token
     NoEcho: true
+  RunnerRequestConcurrency:
+    Type: Number
+    Description: Specify the number of concurrent EC2 virtual machines to spawn
+    Default: 12
   RunnerTagList:
     Type: String
     Description: Optional parameter to specify the gitlab-runner tags (Example "docker,aws")
@@ -327,6 +332,7 @@ Resources:
           {"Name":"CACHE_S3_BUCKET_NAME", "Value": !Ref GitLabRunnerCacheBucket},
           {"Name":"CACHE_S3_BUCKET_LOCATION", "Value": !Ref "AWS::Region"},
           {"Name":"CACHE_S3_SERVER_ADDRESS", "Value": !Join ['', [s3., !Ref 'AWS::URLSuffix']]},
+          {"Name":"RUNNER_REQUEST_CONCURRENCY", "Value": !Ref RunnerRequestConcurrency},
           {"Name":"RUNNER_TAG_LIST", "Value": !Ref RunnerTagList}
         ]
         Secrets: [

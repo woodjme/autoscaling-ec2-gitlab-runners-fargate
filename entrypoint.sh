@@ -33,7 +33,7 @@ gitlab-runner register --executor docker+machine \
 --docker-disable-cache \
 --machine-machine-driver "amazonec2" \
 --machine-machine-name "gitlab-%s" \
---request-concurrency 12 \
+--request-concurrency "$RUNNER_REQUEST_CONCURRENCY" \
 --machine-machine-options amazonec2-use-private-address \
 --machine-machine-options amazonec2-security-group="$AWS_SECURITY_GROUP" \
 "${RUNNER_TAG_LIST_OPT[@]}" \
