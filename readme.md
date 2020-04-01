@@ -12,6 +12,8 @@ The purpose of the CloudFormation template is to create a Fargate Service that m
 * `SubnetID` - Select subnets - Must be in the selected VPC!
 * `GitLabURL` - The Gitlab URL, change if self-hosted
 * `GitLabRegistrationToken` - The Gitlab runer registration token
+* `RunnerRequestConcurrency` - Specify the number of concurrent EC2 virtual machines to spawn (defaults to 12)
+* `RunnerTagList` - Optional parameter to specify the gitlab-runner tags (Example "docker,aws")
 * `AdditionalRegisterParams` - Any additional parameters you want to pass to `gitlab-runner register`
 * `InstanceType` - The instance type of the runners
 * `RootVolumeSize` -The size of the root volume on the runners
