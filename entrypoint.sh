@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set error handling
+set -euo pipefail
+
 # Always unregister runner on exit
 function gitlab-unregister {
     gitlab-runner unregister --all-runners
