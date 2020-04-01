@@ -55,6 +55,7 @@ Parameters:
   GitLabRegistrationToken:
     Type: String
     Description: The Gitlab runer registration token
+    NoEcho: true
   AdditionalRegisterParams:
     Type: String
     Description: Optional parameters to be passed to gitlab-runner register
@@ -198,6 +199,15 @@ Resources:
               - ecs-tasks.amazonaws.com
             Action:
               - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: GitLabRegistrationToken
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'secretsmanager:DescribeSecret'
+                  - 'secretsmanager:GetSecretValue'
+                Resource: !Sub 'arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:gitLabRegistrationToken-*'
   iamRoleForEcsTask:
     Type: AWS::IAM::Role
     Properties:
@@ -290,7 +300,6 @@ Resources:
         Image: woodjme/autoscaling-ec2-gitlab-runners-fargate:latest
         Environment: [
           {"Name":"CI_SERVER_URL", "Value": !Ref GitLabURL},
-          {"Name":"REGISTRATION_TOKEN", "Value": !Ref GitLabRegistrationToken},
           {"Name":"AWS_ROOT_SIZE", "Value": !Ref RootVolumeSize},
           {"Name":"AWS_DEFAULT_REGION", "Value": !Ref "AWS::Region"},
           {"Name":"AWS_VPC_ID", "Value": !Ref VpcId},
@@ -307,6 +316,9 @@ Resources:
           {"Name":"CACHE_S3_BUCKET_NAME", "Value": !Ref GitLabRunnerCacheBucket},
           {"Name":"CACHE_S3_BUCKET_LOCATION", "Value": !Ref "AWS::Region"},
           {"Name":"CACHE_S3_SERVER_ADDRESS", "Value": !Join ['', [s3., !Ref 'AWS::URLSuffix']]}
+        ]
+        Secrets: [
+          {"Name":"REGISTRATION_TOKEN", "ValueFrom": !Ref gitLabRegistrationToken}
         ]
         LogConfiguration:
           LogDriver: awslogs
