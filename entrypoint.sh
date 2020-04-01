@@ -8,6 +8,14 @@ else
     RUNNER_TAG_LIST_OPT=("--run-untagged=true")
 fi
 
+# Define adicional parameters
+if [ -n "${ADDITIONAL_REGISTER_PARAMS:-}" ]
+then
+    IFS=' ' read -r -a ADDITIONAL_REGISTER_PARAMS_OPT <<< "$ADDITIONAL_REGISTER_PARAMS"
+else
+    IFS=' ' read -r -a ADDITIONAL_REGISTER_PARAMS_OPT <<< ""
+fi
+
 # Register
 gitlab-runner register --executor docker+machine \
 --docker-privileged \
@@ -17,9 +25,9 @@ gitlab-runner register --executor docker+machine \
 --machine-machine-name "gitlab-%s" \
 --request-concurrency 12 \
 --machine-machine-options amazonec2-use-private-address \
---machine-machine-options amazonec2-security-group=$AWS_SECURITY_GROUP \
+--machine-machine-options amazonec2-security-group="$AWS_SECURITY_GROUP" \
 "${RUNNER_TAG_LIST_OPT[@]}" \
-$ADDITIONAL_REGISTER_PARAMS
+"${ADDITIONAL_REGISTER_PARAMS_OPT[@]}"
 
 # Native env var seems to be broken for security group
 
