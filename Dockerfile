@@ -8,6 +8,7 @@ ARG DOCKER_MACHINE_VERSION="0.16.2-gitlab.3"
 RUN apt-get update && apt-get install -y \
 	curl \
 	git \
+	dumb-init \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Install Gitlab Runner
@@ -22,4 +23,5 @@ RUN curl -L https://gitlab-docker-machine-downloads.s3.amazonaws.com/v${DOCKER_M
 COPY ./entrypoint.sh ./entrypoint.sh
 
 ENV REGISTER_NON_INTERACTIVE=true
-ENTRYPOINT [ "./entrypoint.sh" ]
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "./entrypoint.sh" ]
