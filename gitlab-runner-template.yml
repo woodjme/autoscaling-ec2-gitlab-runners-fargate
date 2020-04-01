@@ -15,6 +15,7 @@ Metadata:
         Parameters:
           - GitLabURL
           - GitLabRegistrationToken
+          - RunnerTagList
           - AdditionalRegisterParams
       -
         Label:
@@ -56,6 +57,10 @@ Parameters:
     Type: String
     Description: The Gitlab runer registration token
     NoEcho: true
+  RunnerTagList:
+    Type: String
+    Description: Optional parameter to specify the gitlab-runner tags (Example "docker,aws")
+    Default: ""
   AdditionalRegisterParams:
     Type: String
     Description: Optional parameters to be passed to gitlab-runner register
@@ -321,7 +326,8 @@ Resources:
           {"Name":"CACHE_SHARED", "Value": "true"},
           {"Name":"CACHE_S3_BUCKET_NAME", "Value": !Ref GitLabRunnerCacheBucket},
           {"Name":"CACHE_S3_BUCKET_LOCATION", "Value": !Ref "AWS::Region"},
-          {"Name":"CACHE_S3_SERVER_ADDRESS", "Value": !Join ['', [s3., !Ref 'AWS::URLSuffix']]}
+          {"Name":"CACHE_S3_SERVER_ADDRESS", "Value": !Join ['', [s3., !Ref 'AWS::URLSuffix']]},
+          {"Name":"RUNNER_TAG_LIST", "Value": !Ref RunnerTagList}
         ]
         Secrets: [
           {"Name":"REGISTRATION_TOKEN", "ValueFrom": !Ref gitLabRegistrationToken}
