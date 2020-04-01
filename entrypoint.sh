@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Always unregister runner on exit
+function gitlab-unregister {
+    gitlab-runner unregister --all-runners
+}
+
+trap 'gitlab-unregister' EXIT SIGHUP SIGINT SIGTERM
+
 # Define runner tags
 if [ -n "${RUNNER_TAG_LIST:-}" ]
 then
