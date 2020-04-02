@@ -1,32 +1,34 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Autoscaling Gitlab Runners Spawned by Fargate
-Metadata: 
-  AWS::CloudFormation::Interface: 
-    ParameterGroups: 
-      - 
-        Label: 
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
           default: "Network Configuration"
-        Parameters: 
+        Parameters:
           - VpcId
           - SubnetId
-      - 
-        Label: 
+      -
+        Label:
           default: "GitLab Configuration"
-        Parameters: 
+        Parameters:
           - GitLabURL
           - GitLabRegistrationToken
+          - RunnerTagList
+          - RunnerRequestConcurrency
           - AdditionalRegisterParams
-      - 
-        Label: 
+      -
+        Label:
           default: "GitLab Runner Configuration"
-        Parameters: 
+        Parameters:
           - InstanceType
           - RootVolumeSize
           - CacheExpirationInDays
-      - 
-        Label: 
+      -
+        Label:
           default: "Fargate Spawner Configuration"
-        Parameters: 
+        Parameters:
           - CPU
           - Memory
           - DockerImage
@@ -55,6 +57,15 @@ Parameters:
   GitLabRegistrationToken:
     Type: String
     Description: The Gitlab runer registration token
+    NoEcho: true
+  RunnerRequestConcurrency:
+    Type: Number
+    Description: Specify the number of concurrent EC2 virtual machines to spawn
+    Default: 12
+  RunnerTagList:
+    Type: String
+    Description: Optional parameter to specify the gitlab-runner tags (Example "docker,aws")
+    Default: ""
   AdditionalRegisterParams:
     Type: String
     Description: Optional parameters to be passed to gitlab-runner register
@@ -156,9 +167,15 @@ Mappings:
 # Conditions:
 
 Resources:
+  gitLabRegistrationToken:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: gitLabRegistrationToken
+      Description: The Gitlab runer registration token
+      SecretString: !Ref GitLabRegistrationToken
   iamUser:
     Type: AWS::IAM::User
-    Properties: 
+    Properties:
       UserName: !Join ['-', [ !Ref 'AWS::StackName', s3user]]
       Policies:
         - PolicyName: GitLabCacheBucket
@@ -198,11 +215,20 @@ Resources:
               - ecs-tasks.amazonaws.com
             Action:
               - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: GitLabRegistrationToken
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'secretsmanager:DescribeSecret'
+                  - 'secretsmanager:GetSecretValue'
+                Resource: !Sub 'arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:gitLabRegistrationToken-*'
   iamRoleForEcsTask:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Join ['-', [ !Ref 'AWS::StackName', GitlabECSTaskRole]]
-      ManagedPolicyArns: 
+      ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEC2FullAccess
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -215,19 +241,19 @@ Resources:
               - 'sts:AssumeRole'
   SpawnerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
-    Properties: 
+    Properties:
       GroupDescription: GitlabSpawnerSecurityRules
       GroupName: !Join ['-', [ !Ref 'AWS::StackName', GitlabSpawnerSecurityRules]]
-      SecurityGroupEgress: 
+      SecurityGroupEgress:
         - IpProtocol: "-1"
           CidrIp: 0.0.0.0/0
       VpcId: !Ref VpcId
   RunnerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
-    Properties: 
+    Properties:
       GroupDescription: GitlabRunnerSecurityRules
       GroupName: !Join ['-', [ !Ref 'AWS::StackName', GitlabRunnerSecurityRules]]
-      SecurityGroupIngress: 
+      SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
@@ -236,7 +262,7 @@ Resources:
           FromPort: 2376
           ToPort: 2376
           SourceSecurityGroupId: !GetAtt SpawnerSecurityGroup.GroupId
-      SecurityGroupEgress: 
+      SecurityGroupEgress:
         - IpProtocol: "-1"
           CidrIp: 0.0.0.0/0
       VpcId: !Ref VpcId
@@ -290,7 +316,6 @@ Resources:
         Image: woodjme/autoscaling-ec2-gitlab-runners-fargate:latest
         Environment: [
           {"Name":"CI_SERVER_URL", "Value": !Ref GitLabURL},
-          {"Name":"REGISTRATION_TOKEN", "Value": !Ref GitLabRegistrationToken},
           {"Name":"AWS_ROOT_SIZE", "Value": !Ref RootVolumeSize},
           {"Name":"AWS_DEFAULT_REGION", "Value": !Ref "AWS::Region"},
           {"Name":"AWS_VPC_ID", "Value": !Ref VpcId},
@@ -306,7 +331,12 @@ Resources:
           {"Name":"CACHE_SHARED", "Value": "true"},
           {"Name":"CACHE_S3_BUCKET_NAME", "Value": !Ref GitLabRunnerCacheBucket},
           {"Name":"CACHE_S3_BUCKET_LOCATION", "Value": !Ref "AWS::Region"},
-          {"Name":"CACHE_S3_SERVER_ADDRESS", "Value": !Join ['', [s3., !Ref 'AWS::URLSuffix']]}
+          {"Name":"CACHE_S3_SERVER_ADDRESS", "Value": !Join ['', [s3., !Ref 'AWS::URLSuffix']]},
+          {"Name":"RUNNER_REQUEST_CONCURRENCY", "Value": !Ref RunnerRequestConcurrency},
+          {"Name":"RUNNER_TAG_LIST", "Value": !Ref RunnerTagList}
+        ]
+        Secrets: [
+          {"Name":"REGISTRATION_TOKEN", "ValueFrom": !Ref gitLabRegistrationToken}
         ]
         LogConfiguration:
           LogDriver: awslogs
