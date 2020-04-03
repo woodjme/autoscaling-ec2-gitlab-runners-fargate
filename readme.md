@@ -15,6 +15,7 @@ The purpose of the CloudFormation template is to create a Fargate Service that m
 * `RunnerRequestConcurrency` - Specify the number of concurrent EC2 virtual machines to spawn (defaults to 12)
 * `RunnerTagList` - Optional parameter to specify the gitlab-runner tags (Example "docker,aws")
 * `AdditionalRegisterParams` - Any additional parameters you want to pass to `gitlab-runner register`
+* `RunnerVersion` The GitLab runner version
 * `InstanceType` - The instance type of the runners
 * `RootVolumeSize` -The size of the root volume on the runners
 * `CacheExpirationInDays` - Select how long to store a jobs cache output in S3
