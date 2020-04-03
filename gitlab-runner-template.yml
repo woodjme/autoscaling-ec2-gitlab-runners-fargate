@@ -22,6 +22,7 @@ Metadata:
         Label:
           default: "GitLab Runner Configuration"
         Parameters:
+          - RunnerVersion
           - InstanceType
           - RootVolumeSize
           - CacheExpirationInDays
@@ -122,6 +123,17 @@ Parameters:
       'x1e.xlarge', 'x1e.2xlarge', 'x1e.4xlarge', 'x1e.8xlarge', 'x1e.16xlarge', 'x1e.32xlarge',
       'z1d.large', 'z1d.xlarge', 'z1d.2xlarge', 'z1d.3xlarge', 'z1d.6xlarge', 'z1d.12xlarge',
     ]
+  RunnerVersion:
+    Type: String
+    Description: The GitLab Runner Version
+    Default: latest
+    AllowedValues: [
+      'latest',
+      '12.9.0',
+      '12.8.0',
+      '12.7.1',
+      'dev',
+      ]
 
 Mappings:
   AWSAMIRegionMap:
@@ -313,7 +325,7 @@ Resources:
       RequiresCompatibilities: [ FARGATE ]
       ContainerDefinitions:
       - Name: !Join ['', [!Ref 'AWS::StackName', -gitlab-runner-spawner]]
-        Image: woodjme/autoscaling-ec2-gitlab-runners-fargate:latest
+        Image: !Join [':', [woodjme/autoscaling-ec2-gitlab-runners-fargate, !Ref RunnerVersion]]
         Environment: [
           {"Name":"CI_SERVER_URL", "Value": !Ref GitLabURL},
           {"Name":"AWS_ROOT_SIZE", "Value": !Ref RootVolumeSize},
