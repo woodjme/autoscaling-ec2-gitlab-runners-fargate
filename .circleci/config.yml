@@ -1,19 +1,13 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.15
-jobs:
-  test:
+  build:
     docker:
       - image: 'python:3-slim'
     steps:
       - checkout
       - run: pip install cfn-lint
       - run: cfn-lint -t gitlab-runner-template.yml
-  deploy:
-    docker:
-      - image: 'python:3-slim'
-    steps:
-      - checkout
       - aws-s3/copy:
           arguments: '--acl public-read'
           from: ./gitlab-runner-template.yml
