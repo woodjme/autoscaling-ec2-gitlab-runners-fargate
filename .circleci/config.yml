@@ -7,7 +7,7 @@ jobs:
       - image: 'python:3-slim'
     steps:
       - checkout
-      - run: pip install cfn-lint
+      - run: pip install cfn-lint awscli
       - run: cfn-lint -t gitlab-runner-template.yml
       - aws-s3/copy:
           arguments: '--acl public-read'
