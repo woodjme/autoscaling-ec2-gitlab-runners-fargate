@@ -13,3 +13,7 @@ jobs:
           arguments: '--acl public-read'
           from: ./gitlab-runner-template.yml
           to: 's3://autoscaling-ec2-gitlab-runners-fargate/${CIRCLE_BRANCH}/gitlab-runner-template.yml'
+    branches:
+      only:
+        - master
+        - dev
