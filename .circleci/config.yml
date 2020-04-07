@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-s3: circleci/aws-s3@x.y
+  aws-s3: circleci/aws-s3@1.0.15
 jobs:
   test:
     docker:
@@ -17,5 +17,4 @@ jobs:
       - aws-s3/copy:
           arguments: '--acl public-read'
           from: ./gitlab-runner-template.yml
-          to: 's3://my-s3-bucket-name'
-          s3://autoscaling-ec2-gitlab-runners-fargate/${CIRCLE_BRANCH}/gitlab-runner-template.yml
+          to: 's3://autoscaling-ec2-gitlab-runners-fargate/${CIRCLE_BRANCH}/gitlab-runner-template.yml'
