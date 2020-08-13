@@ -1,6 +1,6 @@
 # Autoscaling EC2 GitLab Runners Spawned by Fargate
 
-The purpose of the CloudFormation template is to create a Fargate Service that manages and autoscales EC2 instances to serve as a Gitlab CI executors. This allows for private GitLab Runners without managing, patching or maintaing servers.
+The purpose of the CloudFormation template is to create a Fargate Service that manages and autoscales EC2 instances to serve as a Gitlab CI executors. This allows for private GitLab Runners without managing, patching or maintaining servers.
 
 ## Why Use EC2 executors?
 
