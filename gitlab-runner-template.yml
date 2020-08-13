@@ -129,7 +129,14 @@ Parameters:
     Default: latest
     AllowedValues: [
       'latest',
-      '12.9.0',
+      '13.2.1',
+      '13.2.0',
+      '13.1.1',
+      '13.1.0',
+      '13.0.0',
+      '12.10.2',
+      '12.10.1',
+      '12.10.0',
       '12.8.0',
       '12.7.1',
       'dev',
@@ -137,44 +144,48 @@ Parameters:
 
 Mappings:
   AWSAMIRegionMap:
+    af-south-1:
+      UBUNTU1804: ami-04ef2733e8b8097f4
     ap-east-1:
-      UBUNTU1804: ami-5ad2972b
+      UBUNTU1804: ami-107d3e61
     ap-northeast-1:
-      UBUNTU1804: ami-07f4cb4629342979c
+      UBUNTU1804: ami-01c36f3329957b16a
     ap-northeast-2:
-      UBUNTU1804: ami-0cd7b0de75f5a35d1
+      UBUNTU1804: ami-05438a9ce08100b25
     ap-northeast-3:
-      UBUNTU1804: ami-0e2f764913dedaee9
+      UBUNTU1804: ami-05a1fb6629fedc070
     ap-south-1:
-      UBUNTU1804: ami-0620d12a9cf777c87
+      UBUNTU1804: ami-02b5fbc2cb28b77b8
     ap-southeast-1:
-      UBUNTU1804: ami-09a4a9ce71ff3f20b
+      UBUNTU1804: ami-0007cf37783ff7e10
     ap-southeast-2:
-      UBUNTU1804: ami-02a599eb01e3b3c5b
+      UBUNTU1804: ami-0f87b0a4eff45d9ce
     ca-central-1:
-      UBUNTU1804: ami-098dce2d49ef14294
+      UBUNTU1804: ami-054798b3f62ca2a31
     eu-central-1:
-      UBUNTU1804: ami-0b418580298265d5c
+      UBUNTU1804: ami-04932daa2567651e7
     eu-north-1:
-      UBUNTU1804: ami-0b7937aeb16a7eb94
+      UBUNTU1804: ami-0363142d8c97b94c8
+    eu-south-1:
+      UBUNTU1804: ami-072ba62ae4c03effc
     eu-west-1:
-      UBUNTU1804: ami-035966e8adab4aaad
+      UBUNTU1804: ami-07ee42ba0209b6d77
     eu-west-2:
-      UBUNTU1804: ami-006a0174c6c25ac06
+      UBUNTU1804: ami-04edc9c2bfcf9a772
     eu-west-3:
-      UBUNTU1804: ami-096b8af6e7e8fb927
+      UBUNTU1804: ami-03d4fca0a9ced3d1f
     me-south-1:
-      UBUNTU1804: ami-02379a9b0bb140843
+      UBUNTU1804: ami-06fdc76efb53b5d44
     sa-east-1:
-      UBUNTU1804: ami-05494b93950efa2fd
+      UBUNTU1804: ami-08caf314e5abfbef4
     us-east-1:
-      UBUNTU1804: ami-07ebfd5b3428b6f4d
+      UBUNTU1804: ami-0bcc094591f354be2
     us-east-2:
-      UBUNTU1804: ami-0fc20dd1da406780b
+      UBUNTU1804: ami-0bbe28eb2173f6167
     us-west-1:
-      UBUNTU1804: ami-03ba3948f6c37a4b0
+      UBUNTU1804: ami-0dd005d3eb03f66e8
     us-west-2:
-      UBUNTU1804: ami-0d1cd67c26f5fca19
+      UBUNTU1804: ami-0a634ae95e11c6f91
 
 # Conditions:
 
