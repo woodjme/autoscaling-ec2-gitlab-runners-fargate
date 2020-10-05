@@ -193,7 +193,7 @@ Resources:
   gitLabRegistrationToken:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Name: gitLabRegistrationToken
+      Name: !Join ['-', [ !Ref 'AWS::StackName', gitLabRegistrationToken]]
       Description: The Gitlab runer registration token
       SecretString: !Ref GitLabRegistrationToken
   iamUser:
@@ -201,7 +201,7 @@ Resources:
     Properties:
       UserName: !Join ['-', [ !Ref 'AWS::StackName', s3user]]
       Policies:
-        - PolicyName: GitLabCacheBucket
+        - PolicyName: !Join ['-', [ !Ref 'AWS::StackName', GitLabCacheBucket]]
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
@@ -239,7 +239,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Policies:
-        - PolicyName: GitLabRegistrationToken
+        - PolicyName: !Join ['-', [ !Ref 'AWS::StackName', GitLabRegistrationToken]]
           PolicyDocument:
             Statement:
               - Effect: Allow
@@ -322,7 +322,7 @@ Resources:
   CloudwatchLogsGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Join ['-', [ECSLogGroup, !Ref 'AWS::StackName']]
+      LogGroupName: !Join ['-', [!Ref 'AWS::StackName', ECSLogGroup]]
       RetentionInDays: 14
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
