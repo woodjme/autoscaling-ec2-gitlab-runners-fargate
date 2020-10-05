@@ -312,13 +312,12 @@ Resources:
       LaunchType: FARGATE
       ServiceName: !Join ['-', [ !Ref 'AWS::StackName', service]]
       TaskDefinition: !Ref TaskDefinition
-      NetworkConfiguration: {
-        "AwsvpcConfiguration": {
-          "AssignPublicIp" : ENABLED,
-          "Subnets" : !Ref SubnetId,
-          "SecurityGroups" : [ !GetAtt SpawnerSecurityGroup.GroupId ]
-        }
-      }
+      NetworkConfiguration:
+        AwsVpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets: !Ref SubnetId
+          SecurityGroups:
+            - !GetAtt SpawnerSecurityGroup.GroupId
   CloudwatchLogsGroup:
     Type: AWS::Logs::LogGroup
     Properties:
