@@ -313,7 +313,7 @@ Resources:
       ServiceName: !Join ['-', [ !Ref 'AWS::StackName', service]]
       TaskDefinition: !Ref TaskDefinition
       NetworkConfiguration:
-        AwspcConfiguration:
+        AwsvpcConfiguration:
           AssignPublicIp: ENABLED
           Subnets:
             - !Ref SubnetId
