@@ -313,9 +313,10 @@ Resources:
       ServiceName: !Join ['-', [ !Ref 'AWS::StackName', service]]
       TaskDefinition: !Ref TaskDefinition
       NetworkConfiguration:
-        AwsVpcConfiguration:
+        AwsvpcConfiguration:
           AssignPublicIp: ENABLED
-          Subnets: !Ref SubnetId
+          Subnets:
+            - !Ref SubnetId
           SecurityGroups:
             - !GetAtt SpawnerSecurityGroup.GroupId
   CloudwatchLogsGroup:
