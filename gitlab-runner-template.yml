@@ -294,10 +294,10 @@ Resources:
     Properties:
       AccessControl: Private
       PublicAccessBlockConfiguration:
-          BlockPublicAcls : true
-          BlockPublicPolicy : true
-          IgnorePublicAcls : true
-          RestrictPublicBuckets : true
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
       LifecycleConfiguration:
         Rules:
           - Status: 'Enabled'
@@ -308,7 +308,7 @@ Resources:
     Type: AWS::ECS::Service
     Properties:
       Cluster: !Ref ECSCluster
-      DesiredCount : 1
+      DesiredCount: 1
       LaunchType: FARGATE
       ServiceName: !Join ['-', [ !Ref 'AWS::StackName', service]]
       TaskDefinition: !Ref TaskDefinition
@@ -344,7 +344,7 @@ Resources:
           {"Name":"AWS_VPC_ID", "Value": !Ref VpcId},
           {"Name":"AWS_SSH_USER", "Value": 'ubuntu'},
           {"Name":"AWS_SECURITY_GROUP", "Value": !Join ['-', [ !Ref 'AWS::StackName', GitlabRunnerSecurityRules]]},
-          {"Name":"AWS_AMI", "Value": { "Fn::FindInMap" : [ "AWSAMIRegionMap", { "Ref" : "AWS::Region" }, "UBUNTU1804"]}},
+          {"Name":"AWS_AMI", "Value": { "Fn::FindInMap": [ "AWSAMIRegionMap", { "Ref": "AWS::Region" }, "UBUNTU1804"]}},
           {"Name":"DOCKER_IMAGE", "Value": !Ref DockerImage},
           {"Name":"ADDITIONAL_REGISTER_PARAMS", "Value": !Ref AdditionalRegisterParams},
           {"Name":"AWS_INSTANCE_TYPE", "Value": !Ref InstanceType},
