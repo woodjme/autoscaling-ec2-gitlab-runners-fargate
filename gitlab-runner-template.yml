@@ -315,8 +315,7 @@ Resources:
       NetworkConfiguration:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
-          Subnets:
-            - !Ref SubnetId
+          Subnets: !Ref SubnetId
           SecurityGroups:
             - !GetAtt SpawnerSecurityGroup.GroupId
   CloudwatchLogsGroup:
