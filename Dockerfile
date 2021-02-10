@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 LABEL maintainer="me@jamiewood.io"
 
-ARG GITLAB_RUNNER_VERSION="13.7.0"
+ARG GITLAB_RUNNER_VERSION="13.8.0"
 ARG DOCKER_MACHINE_VERSION="0.16.2-gitlab.4"
 
 # Install deps
